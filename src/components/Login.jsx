@@ -1,32 +1,46 @@
+import React, { useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUserLogin } from '../api/loginapi';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../Authenticator';
 
 function Login() {
-  const router = useNavigate();
+  const navigate = useNavigate();
 
   const schema = z.object({
-    username: z.string().min(2).max(30),
+  
     email: z.string().email().min(8).max(24),
     password: z.string().min(5).max(10),
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
 
-  const { mutate: logindata, isLoading, isError, error, isSuccess } = useUserLogin();
+  const { mutate: login, isLoading, isError, error, isSuccess } = useUserLogin();
+  const { checkToken, role } = useAuth();
 
   useEffect(() => {
+    console.log("Role:", role);
     if (isSuccess) {
-      router("/AdminDashboard");
+      console.log("Login successful");
+      checkToken();
+       
+      const userRole = localStorage.getItem("role"); 
+   
+      if (userRole === "isAdmin") {
+        navigate("/AdminDashboard");
+      } else  {
+        navigate("/useDashboard");
+      }
     }
-  }, [isSuccess, router]);
+  }, [isSuccess, checkToken, role, navigate]);
+  
 
+  
+  
   const onSubmit = (data) => {
-    logindata(data);
+    login(data);
   };
 
   return (
@@ -37,11 +51,7 @@ function Login() {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="username" className="sr-only">Username</label>
-              <input id="username" type="text" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Username" {...register("username")} />
-              {errors.username && <p className='mt-1 text-red-500 text-sm'>{errors.username.message}</p>}
-            </div>
+          
             <div>
               <label htmlFor="email" className="sr-only">Email address</label>
               <input id="email" type="email" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" {...register("email")} />

@@ -11,11 +11,11 @@ const login = async (data) => {
 
     if (response?.data?.token) {
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("role", response.data.isAdmin);
+      localStorage.setItem("role", response.data.isAdmin ? "isAdmin" : "user");
     }
 
     console.log("Login successful:", response.data.isAdmin);
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.error("Login failed:", error);
     throw new Error("Login failed. Please try again."); // Throw an error for React Query to handle

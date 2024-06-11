@@ -1,108 +1,102 @@
-import { useState } from "react";
-import Donft from "./Donft";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-function Donate() {
-    const [definedDonation, setDefinedDonation] = useState("");
-    const [customDonation, setCustomDonation] = useState("");
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [address, setAddress] = useState("");
+const Donate = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [amount, setAmount] = useState("");
 
-    const definedAmounts = [500, 1000, 5000, 10000];
+  useEffect(() => {
+   
+    const script = document.createElement("script");
+    script.src = "https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js";
+    script.async = true;
+    document.body.appendChild(script);
 
-    const handleDefinedDonation = (amount) => {
-        setDefinedDonation(amount);
-        setCustomDonation("");
+    return () => {
+      document.body.removeChild(script);
     };
+  }, []);
+  
 
-    const handleCustomDonation = (e) => {
-        setCustomDonation(e.target.value);
-        setDefinedDonation("");
+  const handleDonate = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      return_url: import.meta.env.VITE_SUCCESS_URL,
+      website_url: import.meta.env.VITE_WEBSITE_URL,
+      amount: parseInt(amount) * 100, // Convert amount to paisa
+      purchase_order_id: "test12",
+      purchase_order_name: "Donation",
+      customer_info: { name, email, phone },
+      merchant_extra: "Thank you for your donation!",
     };
+    console.log("payload",payload)
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Donation Details:");
-        console.log("Username:", username);
-        console.log("Email:", email);
-        console.log("Phone Number:", phoneNumber);
-        console.log("Address:", address);
-        console.log("Donation Amount:", definedDonation || customDonation);
-       
-    };
+    try {
+      const response = await axios.post("http://localhost:5000/api/v7/khalti-api", payload);
+      if (response.data.payment_url) {
+        window.location.href = response.data.payment_url; 
+      }
+    } catch (error) {
+      console.error("Error initiating donation:", error);
+    }
+  };
 
-    return (
-        <>
-            <div className="bg-orange-50 min-h-screen flex items-center justify-center">
-                <div className="bg-white h-auto w-96 flex flex-col items-center shadow-lg rounded-lg p-8">
-                    <h2 className="text-2xl font-semibold text-center mb-6">Make a Donation</h2>
-                    <form onSubmit={handleSubmit} className="w-full">
-                        <div className="mb-6">
-                            <p className="font-semibold mb-2">Choose an Amount:</p>
-                            <div className="flex flex-wrap">
-                                {definedAmounts.map((amount, index) => (
-                                    <button
-                                        key={index}
-                                        type="button"
-                                        onClick={() => handleDefinedDonation(amount)}
-                                        className={`bg-orange-400 text-white font-semibold px-4 py-2 rounded-md mr-2 mb-2 focus:outline-none ${definedDonation === amount ? 'bg-gray-600' : 'bg-orange-500 hover:bg-orange-600'}`}
-                                    >
-                                        ${amount}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="mb-6">
-                            <p className="font-semibold mb-2">Or Enter Custom Amount:</p>
-                            <div className="flex items-center border border-gray-300 rounded-md px-4 py-2">
-                                <input
-                                    type="number"
-                                    id="customAmount"
-                                    placeholder="Enter custom amount"
-                                    value={customDonation}
-                                    onChange={handleCustomDonation}
-                                    className="w-full focus:outline-none"
-                                />
-                            </div>
-                        </div>
-                        <div className="mb-6">
-                            <input
-                                type="text"
-                                placeholder="Your Name"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none mb-2"
-                            />
-                            <input
-                                type="email"
-                                placeholder="Your Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none mb-2"
-                            />
-                            <input
-                                type="tel"
-                                placeholder="Your Phone Number"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none mb-2"
-                            />
-                            <textarea
-                                placeholder="Your Address"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none mb-2"
-                                rows="3"
-                            ></textarea>
-                        </div>
-                        <button type="submit" className="bg-orange-400 text-white font-semibold px-6 py-3 rounded-md w-full focus:outline-none hover:bg-orange-500 transition duration-300">Donate</button>
-                    </form>
-                </div>
-            </div>
-            <Donft />
-        </>
-    );
-}
+  useEffect(() => {
+   
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("status") === "success") {
+      window.location.href = "http://localhost:3000/Donation"; 
+    }
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-3xl font-bold mb-4">Donate to Our Cause</h1>
+      <form onSubmit={handleDonate} className="flex flex-col gap-4">
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="px-4 py-2 border rounded"
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="px-4 py-2 border rounded"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="px-4 py-2 border rounded"
+          required
+        />
+        <input
+          type="number"
+          placeholder="Amount (in NPR)"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="px-4 py-2 border rounded"
+          required
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
+        >
+          Donate with Khalti
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default Donate;

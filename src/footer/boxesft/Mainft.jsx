@@ -1,41 +1,36 @@
 import { Contact } from "../../components/Contact";
 
-
 function Mainft() {
-    return (
-      <>
-        <div className="bg-cover bg-center bg-gray-900 w-full h-64 mt-1 px-8 py-8"> 
-          <div className="flex items-center justify-start gap-10">
-            <div>
-              <h2 className="text-xl font-bold text-white">Working Hours</h2>
-              <div className="text-white px-8 py-8">
-                <p className="font-semibold underline">Day</p>
-                <p>Sunday to Friday</p>
-                <p className="font-semibold underline">Time</p>
-                <p>10am to 4pm</p>
-              </div>
+  return (
+    <div className="bg-gradient-to-b from-gray-800 to-gray-900 w-full py-8">
+      <div className="container mx-auto px-8">
+        <div className="flex flex-wrap justify-between items-start gap-10">
+          <div>
+            <h2 className="text-2xl font-bold text-white border-b-2 border-blue-500 inline-block pb-1">Working Hours</h2>
+            <div className="text-white mt-4">
+              <p className="font-semibold underline">Day</p>
+              <p>Sunday to Friday</p>
+              <p className="font-semibold underline mt-4">Time</p>
+              <p>10am to 4pm</p>
             </div>
-            <div>
-              <h2 className="text-xl font-bold text-white">Office</h2>
-              <div className="text-white px-8 py-8">
-                <p className="font-semibold underline">Location</p>
-                <p>Nepal, Kathmandu</p>
-                <p>Lalitpur, Imadol</p>
-                <p>Street-15</p>
-              </div>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-white border-b-2 border-blue-500 inline-block pb-1">Office</h2>
+            <div className="text-white mt-4">
+              <p className="font-semibold underline">Location</p>
+              <p>Nepal, Kathmandu</p>
+              <p>Lalitpur, Imadol</p>
+              <p>Street-15</p>
             </div>
-             <div className="flex flex-col gap-4">
-            <button className="font-bold text-white bg-blue-500 hover:bg-blue-600 border rounded-full px-4 py-2 focus:outline-none">
-              About us
-            </button>
-             <Contact/>
-            </div>
-
+          </div>
+          <div className="flex flex-col gap-4">
+            
+            
           </div>
         </div>
-      </>
-    );
-  }
-  
-  export default Mainft;
-  
+      </div>
+    </div>
+  );
+}
+
+export default Mainft;
