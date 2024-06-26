@@ -5,6 +5,7 @@ import { fetchImages, uploadImage, updateImage, deleteImage } from '../api/image
 const Adminphotos = () => {
   const queryClient = useQueryClient();
   const { data: images, error, isLoading } = useQuery('images', fetchImages);
+  console.log("imagedsagdfahsfdhfashdfhgs",images)
 
   const createImageMutation = useMutation(uploadImage, {
     onSuccess: () => {
@@ -97,7 +98,7 @@ const Adminphotos = () => {
               onChange={(e) => setFile(e.target.files[0])}
               className="border border-gray-300 rounded-md px-3 py-1 mr-3 w-full mb-2"
             />
-            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-md">Upload Image</button>
+            <button type="sbmit" className="bg-blue-500 text-white px-4 py-1 rounded-md">Upload Image</button>
           </form>
         </div>
       </div>

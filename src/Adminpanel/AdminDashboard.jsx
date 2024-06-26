@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Authenticator';
 
 const drawerWidth = 240;
 
-function AdminDashboard({ children }) {
+function AdminDashboard() {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -36,14 +36,10 @@ function AdminDashboard({ children }) {
               <button className="text-gray-800 w-full py-2 px-4 rounded-md bg-gray-100 hover:bg-gray-200" onClick={() => handleNavigation('/Adminblog')}>About Us Handle</button>
             </li>
             <li>
-              <button className="text-gray-800 w-full py-2 px-4 rounded-md bg-gray-100 hover:bg-gray-200" onClick={() => handleNavigation('/AdminText')}>Text</button>
+              <button className="text-gray-800 w-full py-2 px-4 rounded-md bg-gray-100 hover:bg-gray-200" onClick={() => handleNavigation('/AdminText')}>News handle</button>
             </li>
-            <li>
-              <button className="text-gray-800 w-full py-2 px-4 rounded-md bg-gray-100 hover:bg-gray-200" onClick={() => handleNavigation('/Adminphotos')}>Images</button>
-            </li>
-            <li>
-              <button className="text-gray-800 w-full py-2 px-4 rounded-md bg-gray-100 hover:bg-gray-200" onClick={() => handleNavigation('/AdminDonation')}>Donation</button>
-            </li>
+           
+          
             <li>
               <button className="text-gray-800 w-full py-2 px-4 rounded-md bg-gray-100 hover:bg-gray-200" onClick={() => handleNavigation('/AdminDonationpay')}>Donations payments</button>
             </li>
@@ -63,15 +59,11 @@ function AdminDashboard({ children }) {
         </div>
         <button className="text-gray-800 py-2 px-4 rounded-md bg-red-500 hover:bg-red-600" onClick={handleLogout}>Logout</button>
       </div>
-      <div className="flex-grow p-4 bg-gray-100 min-h-screen overflow-y-auto">
-        {children}
-      </div>
+      
     </div>
   );
 }
 
-AdminDashboard.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+
 
 export { AdminDashboard };

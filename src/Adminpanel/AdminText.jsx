@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { fetchImages, uploadImage, updateImage, deleteImage } from '../api/imageApi/imageApi';
+import { fetchImages, uploadImage,  deleteImage } from '../api/imageApi/imageApi';
 import { useAllTexts, useCreateText, useDeleteText } from '../api/textapi/useTextapi';
 
 const AdminText = () => {
   const queryClient = useQueryClient();
 
-  // Image CRUD operations
   const { data: images, error: imageError, isLoading: imageLoading } = useQuery('images', fetchImages);
 
   const createImageMutation = useMutation(uploadImage, {
@@ -15,11 +14,6 @@ const AdminText = () => {
     },
   });
 
-  const updateImageMutation = useMutation(updateImage, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('images');
-    },
-  });
 
   const deleteImageMutation = useMutation(deleteImage, {
     onSuccess: () => {
@@ -40,18 +34,13 @@ const AdminText = () => {
     setFile(null);
   };
 
-  const handleUpdateImage = async (id) => {
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('file', file);
-    updateImageMutation.mutate({ id, formData });
-  };
+
 
   const handleDeleteImage = async (id) => {
     deleteImageMutation.mutate(id);
   };
 
-  // Text CRUD operations
+
   const { data: texts, isLoading: textLoading, error: textError } = useAllTexts();
   const createTextMutation = useCreateText();
   const deleteTextMutation = useDeleteText();
@@ -62,6 +51,7 @@ const AdminText = () => {
     e.preventDefault();
     try {
       await createTextMutation.mutateAsync(content);
+      queryClient.invalidateQueries('texts');
       setContent('');
     } catch (error) {
       console.error('Error creating text:', error);
@@ -71,6 +61,7 @@ const AdminText = () => {
   const handleDeleteText = async (id) => {
     try {
       await deleteTextMutation.mutateAsync(id);
+      queryClient.invalidateQueries('texts');
     } catch (error) {
       console.error('Error deleting text:', error);
     }
@@ -104,12 +95,6 @@ const AdminText = () => {
                   </td>
                   <td className="border border-gray-300 p-2">{image.title}</td>
                   <td className="border border-gray-300 p-2">
-                    <button
-                      onClick={() => handleUpdateImage(image.id)}
-                      className="bg-blue-500 text-white px-4 py-1 rounded-md mr-2"
-                    >
-                      Update
-                    </button>
                     <button
                       onClick={() => handleDeleteImage(image.id)}
                       className="bg-red-500 text-white px-4 py-1 rounded-md"
@@ -187,7 +172,8 @@ const AdminText = () => {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Enter text content"
-              className="border border-gray-300 rounded-md px-3 py-1 mr-3 w-full h-32 resize-none"
+              className="border border
+-gray-300 rounded-md px-3 py-1 mr-3 w-full h-32 resize-none"
             />
             <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-md mt-2">
               Create Text

@@ -24,14 +24,7 @@ const delUser = async (id) => {
             console.error("Error deleting user:", error);
         },
     });
-    // const handleDelete = async (id) => {
-    //     try {
-    //         await mutation.mutateAsync(id);
-    //     }catch (error) {
-    //         console.error("Mutation error:", error);
-    //     }
-    // };
-    // return { , isLoading: mutation.isLoading, error: mutation.error};
+    
 
 };
 

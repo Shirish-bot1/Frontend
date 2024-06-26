@@ -3,9 +3,9 @@ import axios from "axios";
 
 const uploadFile = async (data) => {
   const formData = new FormData();
-  formData.append('title', data.title);
-  formData.append('author', data.author);
-  formData.append('file', data.file);  // Correct field name for the file
+  formData.append('title', data.get('title'));
+  formData.append('author', data.get('author'));
+  formData.append('file', data.get('file'));  // Correct field name for the file
 
   try {
     const response = await axios({

@@ -5,9 +5,13 @@ import { faDonate } from '@fortawesome/free-solid-svg-icons';
 import Homeft from '../footer/Homeft';
 import FNavbar from './FNavbar';
 import { useGetHomePhotos } from '../api/homepageapi/useUpdateHomePhoto';
+import { useGetAllTextss } from '../api/textapiHome/textapihome';
 
 const Navbar = () => {
+  const { data: texts = [] } = useGetAllTextss();
   const { data: photos, isError: imageError, isLoading: imageLoading } = useGetHomePhotos();
+  
+  console.log("images", photos);
 
   if (imageLoading) {
     return <div>Loading...</div>;
@@ -18,7 +22,7 @@ const Navbar = () => {
   }
 
   const photo = photos && photos.length > 0 ? photos[0] : null;
-  const backgroundImage = photo ? `url(http://localhost:5000${photo.url})` : 'default-image-url.jpg'; // Replace 'default-image-url.jpg' with your fallback image URL
+  const backgroundImage = photo ? `url(http://localhost:5000${photo.url})` : 'default-image-url.jpg'; 
 
   return (
     <>
@@ -27,7 +31,6 @@ const Navbar = () => {
           <div className="container mx-auto py-4 px-6 flex justify-between items-center">
             <div className="flex flex-col mr-4">
               <span className="text-2xl font-bold tracking-wide">Human Rights Organization</span>
-             
             </div>
             <FNavbar />
             <NavLink to="/Donation" className="flex items-center font-bold text-white border-2 border-white rounded-full hover:bg-white hover:text-black transition duration-300 px-4 py-2">
@@ -36,10 +39,18 @@ const Navbar = () => {
             </NavLink>
           </div>
         </header>
-        <div className="container mx-auto my-auto text-center">
-          <h1 className="text-5xl font-bold text-white">Welcome to Our Platform</h1>
-          <p className="text-xl text-gray-200 mt-4">Your support makes a difference</p>
-        </div>
+        {texts.length > 0 ? (
+          texts.map((text) => (
+            <div key={text.id} className="container mx-auto my-auto text-center">
+              <h1 className="text-5xl font-bold text-white">{text.title}</h1>
+              <p className="text-xl text-gray-200 mt-4">{text.content}</p>
+            </div>
+          ))
+        ) : (
+          <div className="container mx-auto my-auto text-center text-white">
+            <h1 className="text-5xl font-bold">No texts available</h1>
+          </div>
+        )}
       </div>
       <Homeft />
     </>

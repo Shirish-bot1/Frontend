@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api/v3', // Update the base URL if needed
+  baseURL: 'http://localhost:5000/api/v3', 
 });
 
 export const uploadImage = async (formData) => {

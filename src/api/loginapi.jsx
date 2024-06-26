@@ -1,6 +1,8 @@
 import axios from "axios";
 
 import { useMutation } from "react-query";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const login = async (data) => {
   console.log("Logging in:", data);
@@ -18,17 +20,17 @@ const login = async (data) => {
     return response?.data;
   } catch (error) {
     console.error("Login failed:", error);
-    throw new Error("Login failed. Please try again."); // Throw an error for React Query to handle
+    throw new Error("Login failed. Please try again."); 
   }
 };
 
 export const useUserLogin = () => {
   return useMutation(login, {
     onSuccess: () => {
-      console.log("Welcome to the dashboard");
+      toast.success("Welcome to the dashboard");
     },
     onError: (error) => {
-      error(`Some error occurred: ${error.message}`);
+      toast.error(`Some error occurred: ${error.message}`);
     },
   });
 };

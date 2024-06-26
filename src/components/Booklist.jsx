@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGetbooks } from "../api/useGetbooks";
+import HeaderNav from '../Navbar/HeaderNav';
 
 const BookList = () => {
   const { data, isLoading, isError } = useGetbooks();
@@ -13,7 +14,11 @@ const BookList = () => {
   }
 
   return (
+  
+  
+
     <div>
+        <HeaderNav/>
       <h2 className="text-2xl font-bold mb-4">Book List</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 bg-indigo-100">
