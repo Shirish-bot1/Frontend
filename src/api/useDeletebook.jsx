@@ -17,7 +17,7 @@ const deleteBook = async (bookId) => {
 
 export const useDeleteBook = () => {
   const queryClient = useQueryClient();
-  return useMutation((bookId) => deleteBook(bookId), { // Pass bookId to deleteBook function
+  return useMutation((bookId) => deleteBook(bookId), { 
     onSuccess: (data) => {
       console.log("Successfully deleted book", data);
       queryClient.invalidateQueries("allbooks");

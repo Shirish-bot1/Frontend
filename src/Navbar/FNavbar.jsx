@@ -7,7 +7,7 @@ function FNavbar() {
         <li>
           <NavLink
             to="/"
-            className="font-bold text-black hover:text-gray-200 transition ease-in-out duration-300 px-4 py-2 block"
+            className="font-bold text-gray-200 hover:text-black transition ease-in-out duration-300 px-4 py-2 block"
           >
             Home
           </NavLink>
@@ -15,7 +15,7 @@ function FNavbar() {
         <li>
           <NavLink
             to="/books"
-            className="font-bold text-black hover:text-gray-200 transition ease-in-out duration-300 px-4 py-2 block hover:drop-shadow-sm"
+            className="font-bold text-gray-200 hover:text-black transition ease-in-out duration-300 px-4 py-2 block hover:drop-shadow-sm"
           >
             Knowledge
           </NavLink>
@@ -23,7 +23,7 @@ function FNavbar() {
         <li>
           <NavLink
             to="/Onlinecom"
-            className="font-bold text-black hover:text-gray-200 transition ease-in-out duration-300 px-4 py-2 block"
+            className="font-bold text-gray-200 hover:text-black transition ease-in-out duration-300 px-4 py-2 block"
           >
             About us
           </NavLink>
@@ -31,7 +31,7 @@ function FNavbar() {
         <li>
           <NavLink
             to="/login"
-            className="font-bold text-black hover:text-gray-200 transition ease-in-out duration-300 px-4 py-2 block"
+            className="font-bold text-gray-200 hover:text-black transition ease-in-out duration-300 px-4 py-2 block"
           >
             Log in
           </NavLink>
@@ -39,7 +39,7 @@ function FNavbar() {
         <li>
           <NavLink
             to="/about"
-            className="font-bold text-black hover:text-gray-200 transition ease-in-out duration-300 px-4 py-2 block"
+            className="font-bold text-gray-200 hover:text-black transition ease-in-out duration-300 px-4 py-2 block"
           >
             News
           </NavLink>

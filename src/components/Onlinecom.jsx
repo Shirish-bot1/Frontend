@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFetchBlogapi } from '../api/blogapi/useFetchBlogapi';
+import HeaderNav from '../Navbar/HeaderNav';
 
 const Onlinecom = () => {
   const { data: blogs, isError, isLoading } = useFetchBlogapi();
@@ -13,7 +14,10 @@ const Onlinecom = () => {
   }
 
   return (
+    <div>
+      <HeaderNav/>
     <div className="container mx-auto p-4">
+      
       <h1 className="text-3xl font-bold mb-4">About Us</h1>
       {blogs && blogs.length > 0 ? (
         <div>
@@ -36,6 +40,7 @@ const Onlinecom = () => {
       ) : (
         <div>No blog posts found.</div>
       )}
+    </div>
     </div>
   );
 };

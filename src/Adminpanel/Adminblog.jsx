@@ -3,13 +3,11 @@ import { useFetchBlogapi } from "../api/blogapi/useFetchBlogapi";
 import { useCreateBlog } from "../api/blogapi/useCreateBlog";
 import { useQueryClient } from "react-query";
 import { useDeleteBlogapi } from "../api/blogapi/useDeleteBlogapi";
-import { useUpdateBlog } from "../api/blogapi/useUpdateBlog";
 
 const AdminBlog = () => {
   const { data: blogs, isLoading, isError } = useFetchBlogapi();
   const { mutate: createBlog } = useCreateBlog();
   const { mutate: deleteBlog } = useDeleteBlogapi();
-  const { mutate: updateBlog } = useUpdateBlog();
   const queryClient = useQueryClient();
 
   const handleDeleteBlog = (blogId) => {
@@ -45,21 +43,6 @@ const AdminBlog = () => {
         queryClient.invalidateQueries("allblogs");
         setFormData({ title: "", content: "", file: null });
         document.getElementById("file-input").value = "";
-      },
-    });
-  };
-
-  const handleUpdateBlog = (e, blogId) => {
-    e.preventDefault();
-    const updateFormData = new FormData();
-    updateFormData.append("title", formData.title);
-    updateFormData.append("content", formData.content);
-    updateFormData.append("file", formData.file);
-
-    updateBlog({ blogId, formData: updateFormData }, {
-      onSuccess: () => {
-        queryClient.invalidateQueries("allblogs");
-        setFormData({ title: "", content: "", file: null });
       },
     });
   };
@@ -100,8 +83,6 @@ const AdminBlog = () => {
                   View Blog
                 </a>
               </p>
-
-
             </div>
             <button
               onClick={() => handleDeleteBlog(blog.id)}
@@ -109,12 +90,8 @@ const AdminBlog = () => {
             >
               Delete
             </button>
-          
           </div>
         ))}
-      </div>
-      <div>
-        
       </div>
       <div className="mt-6">
         <form onSubmit={handleCreateBlog} className="bg-white shadow-md rounded-lg p-6 max-w-lg mx-auto">
@@ -148,60 +125,20 @@ const AdminBlog = () => {
               name="imageUrl" 
               onChange={handleFileChange} 
               required 
-              className="border p-2 w-full           text-sm rounded" 
+              className="border p-2 w-full text-sm rounded" 
             />
           </div>
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm w-full"
           >
-            Add Blog
-          </button>
-        </form>
-        
-      </div>
-      <div className="blog-list">
-        <h3 className="text-xl font-bold mb-4">Blog</h3>
-        <table className="min-w-full bg-white">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="text-left py-3 px-4">Title</th>
-             
-             
-             
-             
-            </tr>
-          </thead>
-          <tbody>
-            {blogs.map((blog) => (
-              <tr key={blog.id}>
-                <td className="border px-4 py-2">
-                  <form onSubmit={(e) => handleUpdateBlog(e, blog.id)} className="flex items-center">
-                    <input type="text" name="title" defaultValue={blog.title} required className="border px-2 py-1 mr-2" />
-                    <textarea
-  name="content"
-  defaultValue={blog.content}
-  required
-  className="border px-2 py-1 mr-2 resize-y w-full h-40 rounded-md focus:outline-none focus:border-blue-500"
-/>
-                    <input type="file" name="file" className="border px-2 py-1 mr-2" />
-                    <button type="submit" className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded">
-                      Update
-                    </button>
-                  </form>
-                </td>
-              
-              
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      
-    </div>
-    
-  );
-};
+            Add
+            Blog
+            </button>
+                </form>
+                  </div>
+                       </div>
+                              );
+                                    };
 
-export default AdminBlog;
-
+                              export default AdminBlog; 

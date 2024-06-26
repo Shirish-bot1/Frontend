@@ -1,44 +1,39 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useUserLogin } from '../api/loginapi';
-import { useAuth } from '../Authenticator';
 
 function Login() {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const schema = z.object({
-  
     email: z.string().email().min(8).max(24),
     password: z.string().min(5).max(10),
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
-
   const { mutate: login, isLoading, isError, error, isSuccess } = useUserLogin();
-  const { checkToken, role } = useAuth();
 
   useEffect(() => {
-    console.log("Role:", role);
+    setErrorMessage(error?.message || '');
+  }, [error]);
+
+  useEffect(() => {
     if (isSuccess) {
-      console.log("Login successful");
-      checkToken();
-       
-      const userRole = localStorage.getItem("role"); 
-   
+      const userRole = localStorage.getItem("role");
       if (userRole === "isAdmin") {
         navigate("/AdminDashboard");
-      } else  {
-        navigate("/useDashboard");
+      } else {
+        setErrorMessage('Unauthorized user');
       }
+    } else if (isError) {
+      setErrorMessage('Failed to log in. Please check your credentials.');
     }
-  }, [isSuccess, checkToken, role, navigate]);
-  
+  }, [isSuccess, isError, navigate]);
 
-  
-  
   const onSubmit = (data) => {
     login(data);
   };
@@ -51,7 +46,6 @@ function Login() {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-md shadow-sm -space-y-px">
-          
             <div>
               <label htmlFor="email" className="sr-only">Email address</label>
               <input id="email" type="email" className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" {...register("email")} />
@@ -68,13 +62,11 @@ function Login() {
             <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
+            {errorMessage && <div className="text-red-500 text-center mt-2">{errorMessage}</div>}
           </div>
 
-          <div className="text-center mt-2">
-            <p className="text-sm text-gray-600">Dont have an account? <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">Register</Link></p>
-          </div>
+       
         </form>
-        {isError && <p className='text-red-600 text-center mt-2'>{error?.response?.data?.message || 'Login failed'}</p>}
       </div>
     </div>
   );

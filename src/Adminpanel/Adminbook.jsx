@@ -7,7 +7,7 @@ import { Bookupdate } from '../api/updateBookapi';
 
 const Adminbook = () => {
   const { data: books, isLoading, isError } = useGetbooks();
-  const createBookMutation = useCreateBook();
+  const {mutate:createBookMutation} = useCreateBook();
   const { mutate: deleteBookMutation } = useDeleteBook();
   const { mutate: updateBookMutation } = Bookupdate();
   const queryClient = useQueryClient();
@@ -34,7 +34,7 @@ const Adminbook = () => {
     newBookFormData.append('author', formData.author);
     newBookFormData.append('file', formData.file);
 
-    createBookMutation.mutate(newBookFormData, {
+    createBookMutation(newBookFormData, {
       onSuccess: () => {
         queryClient.invalidateQueries('allbooks');
         setFormData({ title: '', author: '', file: null });
@@ -50,6 +50,7 @@ const Adminbook = () => {
 
   const handleUpdateBook = (e, bookId) => {
     e.preventDefault();
+    console.log("e",e)
     const updateFormData = new FormData(e.target);
     const updateData = {
       bookId,
@@ -99,14 +100,7 @@ const Adminbook = () => {
             {books.map((book) => (
               <tr key={book.id}>
                 <td className="border px-4 py-2">
-                  <form onSubmit={(e) => handleUpdateBook(e, book.id)} className="flex items-center">
-                    <input type="text" name="title" defaultValue={book.title} required className="border px-2 py-1 mr-2" />
-                    <input type="text" name="author" defaultValue={book.author} required className="border px-2 py-1 mr-2" />
-                    <input type="file" name="file" className="border px-2 py-1 mr-2" />
-                    <button type="submit" className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded">
-                      Update
-                    </button>
-                  </form>
+                <td className="border px-4 py-2">{book.title}</td>
                 </td>
                 <td className="border px-4 py-2">{book.author}</td>
                 <td className="border px-4 py-2">
